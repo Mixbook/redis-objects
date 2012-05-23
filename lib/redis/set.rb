@@ -20,6 +20,13 @@ class Redis
       self  # for << 'a' << 'b'
     end
 
+    # Add the specified values to the set in transaction
+    def mass_add(values)
+      redis.multi do
+        values.each { |value| add(value) }
+      end
+    end
+
     # Add the specified value to the set only if it does not exist already.
     # Redis: SADD
     def add(value)
@@ -88,6 +95,14 @@ class Redis
     # of elements in the stored intersection. Redis: SUNIONSTORE
     def interstore(name, *sets)
       redis.sinterstore(name, key, *keys_from_objects(sets))
+    end
+
+    def flush
+      values = []
+      while value = pop
+        values << value
+      end
+      values
     end
 
     # Return the union with another set.  Can pass it either another set
