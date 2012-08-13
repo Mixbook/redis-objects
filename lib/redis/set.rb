@@ -37,7 +37,7 @@ class Redis
     def pop(limit = 1)
       values = []
       index = 0
-      while (value = from_redis(redis.spop(key))) && index < limit
+      while index < limit && value = from_redis(redis.spop(key))
         values << value
         index += 1
       end
