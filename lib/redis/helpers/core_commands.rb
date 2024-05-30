@@ -2,8 +2,12 @@ class Redis
   module Helpers
     # These are core commands that all types share (rename, etc)
     module CoreCommands
-      def exists?
+      def exists
         redis.exists key
+      end
+
+      def exists?
+        redis.exists? key
       end
       
       def delete
